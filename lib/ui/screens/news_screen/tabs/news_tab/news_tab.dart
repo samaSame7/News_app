@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:news_7/apis/api_manager.dart';
+import 'package:news_7/models/app_category.dart';
 import 'package:news_7/models/source.dart';
-import 'package:news_7/ui/screens/navigation_screen/tabs/news_tab/news_list.dart';
 import 'package:news_7/ui/widgets/app_error.dart';
 
+import 'news_list.dart';
+
 class NewsTab extends StatefulWidget {
-  const NewsTab({super.key});
+  final AppCategory category;
+  const NewsTab({super.key, required this.category});
 
   @override
   State<NewsTab> createState() => _NewsTabState();
@@ -15,7 +18,7 @@ class _NewsTabState extends State<NewsTab> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: ApiManager.loadSources(),
+      future: ApiManager.loadSources(widget.category.name),
       builder: (context, snapshot) {
         if (snapshot.hasError) {
           return AppError(message: snapshot.error.toString());

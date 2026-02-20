@@ -10,12 +10,11 @@ abstract final class ApiManager {
   static const sourcesApi = "/v2/top-headlines/sources";
   static const articleApi = "/v2/everything";
 
-  //static Future<List<Source>> loadSources(String category) async {
-  static Future<List<Source>> loadSources() async {
+  static Future<List<Source>> loadSources(String categoryName) async {
     Dio dio = Dio();
     Response response = await dio.get(
-      //"$baseUrl$sourcesApi?apiKey=$apiKey&category=$category",
-      "$baseUrl$sourcesApi?apiKey=$apiKey",
+      "$baseUrl$sourcesApi",
+      queryParameters: {"apiKey": apiKey, "category": categoryName},
     );
 
     if (response.statusCode == 200) {
