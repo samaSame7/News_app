@@ -1,34 +1,66 @@
 import 'package:flutter/material.dart';
-import 'package:news_7/apis/api_manager.dart';
 import 'package:news_7/models/app_category.dart';
 import 'package:news_7/models/source.dart';
-import 'package:news_7/ui/widgets/app_error.dart';
-
+import 'package:news_7/ui/utils/app_resource.dart';
+import 'package:provider/provider.dart';
 import 'news_list.dart';
+import 'news_view_model.dart';
 
 class NewsTab extends StatefulWidget {
   final AppCategory category;
-  const NewsTab({super.key, required this.category});
+
+  const NewsTab(this.category, {super.key});
 
   @override
   State<NewsTab> createState() => _NewsTabState();
 }
 
 class _NewsTabState extends State<NewsTab> {
+  late NewsViewModel viewModel;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      viewModel.loadSources(widget.category.name);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-      future: ApiManager.loadSources(widget.category.name),
-      builder: (context, snapshot) {
-        if (snapshot.hasError) {
-          return AppError(message: snapshot.error.toString());
-        } else if (snapshot.hasData) {
-          return buildTabsList(snapshot.data!);
-        } else {
-          return Center(child: CircularProgressIndicator());
-        }
-      },
+    return ChangeNotifierProvider(
+      create: (context) => NewsViewModel(),
+      child: Builder(
+        builder: (context) {
+          return Consumer<NewsViewModel>(
+            builder: (context, viewModel, _) {
+              this.viewModel = viewModel;
+              if (viewModel.sourceApi.status == ApiStatus.error) {
+                return Center(
+                  child: Text(viewModel.sourceApi.errorMessage ?? ""),
+                );
+              } else if (viewModel.sourceApi.status == ApiStatus.loading) {
+                return Center(child: CircularProgressIndicator());
+              } else {
+                return buildTabsList(viewModel.sourceApi.data ?? []);
+              }
+            },
+          );
+        },
+      ),
     );
+
+    // return FutureBuilder(
+    //     future: ApiManager.loadSources(widget.category.name),
+    //     builder: (context, snapshot) {
+    //       if (snapshot.hasError) {
+    //         return AppErrorWidget(message: snapshot.error.toString());
+    //       } else if (snapshot.hasData) {
+    //         return buildTabsList(snapshot.data!);
+    //       } else {
+    //         return Center(child: CircularProgrDefaultTabController essIndicator());
+    //       }
+    //     });
   }
 
   Widget buildTabsList(List<Source> sources) {

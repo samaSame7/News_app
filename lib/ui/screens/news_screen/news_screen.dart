@@ -22,7 +22,7 @@ class _NewsScreenState extends State<NewsScreen> {
     return Scaffold(
       appBar: AppBar(title: Text(widget.category.name)),
       drawer: AppDrawer(),
-      body: NewsTab(category: widget.category,),
+      body: NewsTab(widget.category,),
     );
   }
 
