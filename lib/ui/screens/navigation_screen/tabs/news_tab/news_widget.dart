@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:news_7/ui/utils/app_assets.dart';
+import 'package:news_7/models/article.dart';
 import 'package:news_7/ui/utils/extension/context_extension.dart';
 import 'package:news_7/ui/utils/extension/int_extension.dart';
 
 class NewsWidget extends StatelessWidget {
-  const NewsWidget({super.key});
+  final Article article;
+  const NewsWidget({super.key, required this.article});
 
   @override
   Widget build(BuildContext context) {
@@ -21,20 +22,28 @@ class NewsWidget extends StatelessWidget {
           ClipRRect(
             clipBehavior: Clip.hardEdge,
             borderRadius: BorderRadius.circular(16),
-            child: Image.asset(
-              AppAssets.splashLight,
+            child: Image.network(
+              article.urlToImage ?? "",
               height: MediaQuery.of(context).size.height * .2,
               fit: BoxFit.cover,
             ),
           ),
           12.verticalSpace(),
-          Text("data", style: context.textTheme.bodyMedium),
+          Text(article.title ?? "", style: context.textTheme.bodyMedium),
           12.verticalSpace(),
           Row(
             children: [
-              Text("cdsa", style: context.textTheme.labelMedium),
+              Expanded(
+                child: Text(
+                  "By: ${article.author}",
+                  style: context.textTheme.labelMedium,
+                ),
+              ),
               10.horizontalSpace(),
-              Text("cdsa", style: context.textTheme.labelMedium),
+              Text(
+                article.publishedAt ?? "",
+                style: context.textTheme.labelMedium,
+              ),
             ],
           ),
         ],
