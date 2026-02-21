@@ -13,10 +13,10 @@ class NewsRepository {
     if (connectivityResult.contains(ConnectivityResult.mobile) ||
         connectivityResult.contains(ConnectivityResult.wifi)) {
       var sources = await remoteDataSource.loadSources(categoryName);
-      localDataSource.saveSources(sources);
+      localDataSource.saveSources(categoryName, sources);
       return sources;
     } else {
-      return localDataSource.loadSources(categoryName);
+      return await localDataSource.loadSources(categoryName) ?? [];
     }
   }
 }

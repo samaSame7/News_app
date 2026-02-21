@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:news_7/data/repository/news_repository/data_sources/local_data_source/app_local_data_source.dart';
 import 'package:news_7/ui/providers/theme_provider.dart';
 import 'package:news_7/ui/screens/splash_screen/splash_screen.dart';
 import 'package:news_7/ui/utils/app_theme.dart';
 import 'package:provider/provider.dart';
 
 void main() {
+  Hive.initFlutter();
+  Hive.registerAdapter(SourceAdapter());
   runApp(
     ChangeNotifierProvider(
       create: (_) => ThemeProvider(),
