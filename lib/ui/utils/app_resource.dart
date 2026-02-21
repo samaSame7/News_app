@@ -23,7 +23,7 @@ class AppResource<T> {
     status = ApiStatus.success;
   }
   AppResource.error(String error) {
-    this.errorMessage = error;
+    errorMessage = error;
     status = ApiStatus.error;
   }
 }
