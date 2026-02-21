@@ -59,6 +59,11 @@ abstract final class AppTheme {
         color: AppColors.grey,
         fontWeight: FontWeight.w500,
       ),
+      bodyLarge: TextStyle(
+        fontSize: 16,
+        color: AppColors.white,
+        fontWeight: FontWeight.w500,
+      ),
     ),
   );
 
