@@ -1,20 +1,29 @@
-import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:news_7/apis/api_manager.dart';
 import 'package:news_7/models/source.dart';
 import 'package:news_7/ui/utils/app_resource.dart';
 
-class NewsViewModel extends ChangeNotifier {
-  AppResource<List<Source>> sourceApi = AppResource.initial();
+class NewsViewModel extends Cubit<NewsState> {
+  // AppResource<List<Source>> sourceApi = AppResource.initial();
+  NewsViewModel() : super(NewsState(AppResource.initial()));
 
   Future<void> loadSources(String category) async {
     try {
-      sourceApi = AppResource.loading();
-      notifyListeners();
+      // sourceApi = AppResource.loading();
+      // notifyListeners();
+      emit(NewsState(AppResource.loading()));
       var sources = await ApiManager.loadSources(category);
-      sourceApi = AppResource.success(sources);
+      // sourceApi = AppResource.success(sources);
+      emit(NewsState(AppResource.success(sources)));
     } catch (e) {
-      sourceApi = AppResource.error(e.toString());
+      // sourceApi = AppResource.error(e.toString());
+      emit(NewsState(AppResource.error(e.toString())));
     }
-    notifyListeners();
+    // notifyListeners();
   }
+}
+
+class NewsState {
+  AppResource<List<Source>> sourceApi = AppResource.initial();
+  NewsState(this.sourceApi);
 }
