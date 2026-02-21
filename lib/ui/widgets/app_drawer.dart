@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:news_7/ui/providers/theme_provider.dart';
 import 'package:provider/provider.dart';
-
 import '../utils/app_colors.dart';
 
 class AppDrawer extends StatelessWidget {
